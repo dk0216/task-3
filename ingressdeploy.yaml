@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: ingressdeployment
+spec:
+ replicas: 3
+ selector:
+   matchLabels:
+     app: ingressdeployment
+ template:
+   metadata:
+     labels:
+       app: ingressdeployment
+   spec:
+     containers:
+     - name: ingressdeployment
+       image: gcr.io/google-samples/hello-app:1.0
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ingressdeployment
+ annotations:
+   konghq.com/plugins: twelve-per-min
+spec:
+ selector:
+   app: ingressdeployment
+ ports:
+ - port: 80
+   targetPort: 8080
